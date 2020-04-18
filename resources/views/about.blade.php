@@ -17,8 +17,11 @@
             <div id="sidebar">
                 <ul class="style1">
                     @foreach($articles as $article)
-                        <h3> {{ $article->title }}</h3>
-                        <p><a href="#">{{ $article->excerpt }}</a> </p>
+                        <h3>
+                            <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                        </h3>
+
+                        <p>{{ $article->excerpt }}</p>
 
                     @endforeach
                 </ul>

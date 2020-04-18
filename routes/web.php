@@ -101,7 +101,16 @@ Route::get('/about',  function (){
     ]) ;
 });
 
+Route::get('/articles/{article}', 'ArticlesController@show');
 
+
+Route::get('/articles',  function (){
+    $articles = \App\Article::latest()->get();
+
+    return view('articles.all', [
+        'articles' => $articles
+    ]) ;
+});
 
 
 
