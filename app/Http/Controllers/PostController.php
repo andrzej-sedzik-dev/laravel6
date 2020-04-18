@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function show($slug)
+    public function show($post)
     {
         $posts = [
             'my-first-post' => 'Hello this is my first blog post!',
