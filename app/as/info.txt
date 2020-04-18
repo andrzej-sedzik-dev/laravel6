@@ -3,3 +3,54 @@
 http://localhost:8000/posts/123
 null
 
+1a)
+http://localhost:8000/posts/my-first-posts#
+My Blog Post!
+my first post
+
+2)
+http://localhost:8000/posts/my-second-posts#
+Trying to get property 'body' of non-object (View: C:\dev\best\back\laravel\laracasts\laravel6\resources\views\post.blade.php)
+
+a)
+- solved
+        if (!$post){
+            abort(404);
+        }
+b)
+//$post = DB::table('posts')->where('slug', $slug)->first();
+$post = Post::where('slug', $slug)->first();
+
+        if (!$post){
+            abort(404);
+        }
+
+return view('post', [
+            'post' => $post;
+        ]);
+    }
+
+c)
+    public function show($slug)
+    {
+        return view('post', [
+            'post' => $post = Post::where('slug', $slug)->firstOrFail()
+        ]);
+    }
+
+e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
