@@ -152,8 +152,110 @@ Created Migration: 2020_04_18_102658_create_projects_table
 Controller created successfully.
 
 
+4)
+C:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+
+a)
+php artisan tinker
+
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> $assignment = new App\Assignment;
+=> App\Assignment {#3014}
+>>> $assignment->body = 'Fish school work';
+=> "Fish school work"
+>>> $assignment->save();
+=> true
+>>>
+
+PHPMYADMIN:
+id body             completed     created_at               updated_at         du
+1 Fish school work      0           2020-04-18 1 1:02:112  020-04-18 11:02:11 NULL
 
 
+b)
+>>> App\Assignment::all();
+=> Illuminate\Database\Eloquent\Collection {#3023
+     all: [
+       App\Assignment {#3024
+         id: 1,
+         body: "Fish school work",
+         completed: 0,
+         created_at: "2020-04-18 11:02:11",
+         updated_at: "2020-04-18 11:02:11",
+         due_date: null,
+       },
+     ],
+   }
+>>>
+
+c)
+>>> App\Assignment::first();
+=> App\Assignment {#3027
+     id: 1,
+     body: "Fish school work",
+     completed: 0,
+     created_at: "2020-04-18 11:02:11",
+     updated_at: "2020-04-18 11:02:11",
+     due_date: null,
+   }
+>>>
+
+d)
+>>> App\Assignment::where('completed', false)->get()
+=> Illuminate\Database\Eloquent\Collection {#3023
+     all: [
+       App\Assignment {#3019
+         id: 1,
+         body: "Fish school work",
+         completed: 0,
+         created_at: "2020-04-18 11:02:11",
+         updated_at: "2020-04-18 11:02:11",
+         due_date: null,
+       },
+     ],
+   }
+>>>
+
+e)
+class Assignment extends Model{}
+>>> $assigment->complete();
+PHP Notice:  Undefined variable: assigment in Psy Shell code on line 1
+PHP Error:  Call to a member function complete() on null in Psy Shell code on line 1
+
+use Illuminate\Database\Eloquent\Model;
+
+f)
+class Assignment extends Model{ public function complete(){ $this->completed = true; $this->save();}}
+>>> $assignment =  App\Assignment::first()
+=> App\Assignment {#3025
+     id: 1,
+     body: "Fish school work",
+     completed: 0,
+     created_at: "2020-04-18 11:02:11",
+     updated_at: "2020-04-18 11:02:11",
+     due_date: null,
+   }
+>>>
+
+g)
+>>> $assignment->complete();
+=> null
+>>>
+
+
+h)
+>>> $assignment =  App\Assignment::first()
+=> App\Assignment {#3027
+     id: 1,
+     body: "Fish school work",
+     completed: 1,
+     created_at: "2020-04-18 11:02:11",
+     updated_at: "2020-04-18 11:20:02",
+     due_date: null,
+   }
+>>>
+
+i)
 
 
 
