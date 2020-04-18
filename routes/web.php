@@ -82,17 +82,24 @@ Route::get('/contact',  function (){
     return view('contact') ;
 });*/
 
-
 Route::get('/',  function (){
     return view('welcome') ;
 });
 
-Route::get('/about',  function (){
+/*Route::get('/about',  function (){
+    $article = \App\Article::latest()->get();
+    return $article;
     return view('about') ;
+});*/
+
+
+Route::get('/about',  function (){
+    $articles = \App\Article::latest()->get();
+
+    return view('about', [
+        'articles' => $articles
+    ]) ;
 });
-
-
-
 
 
 

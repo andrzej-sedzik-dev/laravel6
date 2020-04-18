@@ -383,7 +383,82 @@ lodash - css-y.
 i)
 w html-u mamy dostęp do bibliotek i funkcji js, pomiędzy takagi <script>
 
+6) RENDER - DYNAMIC - DATA.
+Tworzymy Article, model, migracje, za pomocą fakera uzupełniamy db.
+$article = new App\Article;
+=> App\Article {#3018}
+>>> $article->title = 'Getting to Knowu  us'
+...
+>>> $article->save()
 
+
+7)
+Wyśeitlamy artykuły na stronie:
+return $article zablokuje domyślny widok i wyświetli wszystko w przegląarce.
+- korzystamy z paginacji choć mogliibyśmy zwrócić wszystko od razu:
+$article = \App\Article::all();
+
+
+
+Route::get('/about',  function (){
+    $article = \App\Article::paginate(2);
+
+    return $article;
+    return view('about') ;
+});
+
+
+8)
+http://localhost:8000/about
+{
+current_page: 1,
+data: [
+{
+    id: 1,
+    title: "Getting to Knowu us",
+    excerpt: "Lorem ipsum dolor st amen",
+    body: "Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker",
+    created_at: "2020-04-18T16:25:13.000000Z",
+    updated_at: "2020-04-18T16:25:13.000000Z"
+},
+{
+    id: 2,
+    title: "laravel eero",
+    excerpt: "coś tam",
+    body: "Illuminate/Database/QueryException with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'post' in 'field list' (SQL: insert into `articles` (`title`, `excerpt`, `post`, `updated_at`, `created_at `, `body`) values (Getting to Knowu us, Lorem ipsum dolor st amen, Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznan ego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacj ą arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker, 20 20-04-18 16:25:13, 2020-04-18 16:25:13, Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawiera jących fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker)",
+    created_at: null,
+    updated_at: null
+}
+],
+    first_page_url: "http://localhost:8000/about?page=1",
+    from: 1,
+    last_page: 2,
+    last_page_url: "http://localhost:8000/about?page=2",
+    next_page_url: "http://localhost:8000/about?page=2",
+    path: "http://localhost:8000/about",
+    per_page: 2,
+    prev_page_url: null,
+    to: 2,
+    total: 4
+}
+
+
+9)
+Teraz chcemy wyświetlić ostatni artykuł.
+$article = \App\Article::latest()->get();
+- a możemy zrobić też latest('body')->get()...
+
+
+10)
+- wysyłamy go do widoku...
+
+Route::get('/about',  function (){
+    $articles = \App\Article::latest()->get();
+
+    return view('about', [
+        'articles' => $articles
+    ]) ;
+});
 
 
 
