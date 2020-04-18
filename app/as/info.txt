@@ -289,8 +289,12 @@ contact.blade.php
 @endsection
 
 
-
-
+f)
+https://templated.co/simplework
+- ściągamy przykładową templatkę i montujemy do naszego laravela.
+- po rozpakowaniu wszystko poza plikiem index kopiujemy do pliku public laravela.
+- otwieramy plik index w notatniku a zawartość kopiujemy do naszego layoutu.
+- mamay super tapetę na szaszej stronie.
 
 
 
