@@ -14,4 +14,14 @@ class ArticlesController extends Controller
         return view('articles.show', ['article' => $article]);
     }
 
+    public function index()
+    {
+        $articles = Article::all();
+        return view('articles.index', ['articles' => $articles]);
+    }
+
+
+
+
+
 }
