@@ -299,27 +299,89 @@ https://templated.co/simplework
 
 
 
+5)
+app.sass
+- uzupełniamy pli app.scss
+
+a)
+BEFORE: //
+AFTER:
+    $primary: red
+    body {
+        color: $primary;
+    }
+
+b)
+- modyfikujem plik webpack.mix.js
+BEFORE:
+mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css');
+AFTER:
+//mix.js('resources/js/app.js', 'public/js')
+ mix.sass('resources/sass/app.scss', 'public/css');
+
+c)
+instalujemy zależności znajdujące się w pliku package.json
+npm install
+
+    "devDependencies": {
+        "axios": "^0.19",
+        "cross-env": "^7.0",
+        "laravel-mix": "^5.0.1",
+        "lodash": "^4.17.13",
+        "resolve-url-loader": "^3.1.0",
+        "sass": "^1.15.2",
+        "sass-loader": "^8.0.0",
+        "vue-template-compiler": "^2.6.11"
+    },
 
 
+d)
+npm run dev
+ "dev": "npm run development",
 
 
+e)
+sas compilation error:
+ERROR in ~/resources/sass/app.scss)
+Module build failed (from ./node_modules/sass-loader/dist/cjs.js):
+SassError: expected ";".
+  ╷
+4 │ body {
+  │      ^
+  ╵
+  C:\dev\best\back\laravel\laracasts\laravel6\resources\sass\app.scss 4:6  root stylesheet
+ @ ./resources/sass/app.scss 2:14-253
 
 
+f)
+- dodajemy brakujący średnik po red;.
+$primary: red;
 
 
+body {
+    color: $primary;
+}
 
 
+g)
+skompiilowane pliki zostały wyładowane do public/css/app.css
 
 
+h)
+wracay do bazowego ustawienia w pliku webpack.mix.js
+- chcemy operować na js w plikach
+resources/js/app.js,
+public/js'
 
 
+app.js odwołuje się do pliku bootstra.js który zawiera sporo bibliotek:
+axios - do rządań http
+lodash - css-y.
 
 
-
-
-
-
-
+i)
+w html-u mamy dostęp do bibliotek i funkcji js, pomiędzy takagi <script>
 
 
 
