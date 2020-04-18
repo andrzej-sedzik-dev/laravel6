@@ -495,7 +495,10 @@ http://localhost:8000/articles/1
 
 
 13)
+php artisan make:controller ProjectsController -r
+- tworzy kontroler z metodami.
 
-
-
+a)
+php artisan make:controller ProjectsController -r -m Project
+- teraz mamy metody uzupełnione o argmenty powiązane z modelem który równocześnie tworzymy.
 
