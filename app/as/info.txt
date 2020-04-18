@@ -255,9 +255,38 @@ h)
    }
 >>>
 
-i)
+5) VIEVS
+a)
+welcome.blade.php
+@extends('layout')
+
+@section('content')
+    treść
+@endsection
+
+b)
+layout.blade.php
+<body>
+    @yield('content')
+</body>
 
 
+c)
+Route::get('/contact',  function (){
+    return view('contact') ;
+});
+http://localhost:8000/contact
+View [contact] not found.
+create new file contact.blade.php
+
+
+e)
+contact.blade.php
+@extends('layout')
+
+@section('content')
+    <h1>Hello World!</h1>
+@endsection
 
 
 
