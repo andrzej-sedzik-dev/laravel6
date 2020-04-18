@@ -144,6 +144,12 @@ solve2: (utracimy dane we wszystkich tabelach)
  php artisan migrate:fresh
 
 
+3)
+- tworzymy za jednym razem model, migracje i kontroler.
+C:\dev\best\back\laravel\laracasts\laravel6>php artisan make:model Project -mc
+Model created successfully.
+Created Migration: 2020_04_18_102658_create_projects_table
+Controller created successfully.
 
 
 
