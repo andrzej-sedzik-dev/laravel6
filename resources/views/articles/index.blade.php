@@ -7,7 +7,7 @@
         <div id="page" class="container">
             <div id="content">
                 @foreach($articles as $article)
-                    <h3>
+                    <h3 class="heading has-text-weight-bold is-size-4">
                         <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
                     </h3>
 

@@ -27,12 +27,23 @@ class ArticlesController extends Controller
     public  function create()
     {
         //Shows view to create resource.
+        return view('articles.create');
 
     }
 
     public  function store()
     {
         // Persit the new resource (przechwytauje dane z formularzea create)
+        $article = new Article();
+
+        $article->title = request('title');
+        $article->excerpt = request('excerpt');
+        $article->body = request('body');
+
+        $article->save();
+
+        return redirect('/articles');
+
     }
 
 

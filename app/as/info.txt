@@ -502,3 +502,56 @@ a)
 php artisan make:controller ProjectsController -r -m Project
 - teraz mamy metody uzupełnione o argmenty powiązane z modelem który równocześnie tworzymy.
 
+14)
+npm install bulma
+- dodam sobie snipety css do szablonów.
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+- tak teraz wszystkie części formularza uzyskały fajny wygląd i
+
+
+
+15)
+Route::post('/articles', 'ArticlesController@store');
+a)
+    public  function store()
+    {
+        // Persit the new resource (przechwytauje dane z formularzea create)
+        dump(request()->all());
+    }
+
+http://localhost:8000/articles
+- przechwytujemy dane wysłane z formularza do tablicy i wyświetlamy.
+- widzimy że dodstajey tokena.
+
+array:4 [▼
+  "_token" => "oKnTqvwSaI7VY6StWmk4SZADEIaPjvHdC626NFrk"
+  "title" => "antyki"
+  "excerpt" => "stare stoły dla jemioły"
+  "body" => "ciało bywa grzeszne"
+]
+
+
+b)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
