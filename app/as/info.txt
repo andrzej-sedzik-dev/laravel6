@@ -538,37 +538,86 @@ http://localhost:8000/articles/5/edit
 Route::get('/articles/{article}/edit', 'ArticlesController@edit');
 
 
+17)
+VALIDATION:
+http://localhost:8000/articles/create
+[]
+a)
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'title' cannot be null (SQL: insert into `articles`
+(`title`, `excerpt`, `body`, `updated_at`, `created_at`) values (?, ?, ?, 2020-04-19 17:17:13, 2020-04-19 17:17:13))
 
 
 
 
 
+ArticleController.php.store()
+- dodajemy do store taki wpis
+
+        request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
+b)
+create.blade.php.
+http://localhost:8000/articles/create
+- teraz po przesłaniu pustego formularza nie mamy błęduw sql, nic się nie dzieje.
+<p class="help is-danger">{{ $errors->firt('title') }}</p>
+
+                @if($errors->has('title'))
+                     <p class="help is-danger">{{ $errors->first('title') }}</p>
+                @endif
+
+
+c)
+- walidacja działa pod polem input mamy informacje o błędzie.
+http://localhost:8000/articles/create
+[]
+The title field is required.
+[]
+[]
+
+
+d)
+- teraz dodatkowo zapali się pole input.
+<input class="input {{ $errors->has('title') ? 'is-danger' : '' }}" type="text" name="title"  id="title">
 
 
 
+e)
+<input class="input @error('title')  is-danger @enderror" type="text" name="title"  id="title">
+                                @error('title')
+                                     <p class="help is-danger">{{ $errors->first('title') }}</p>
+                                @enderror
 
 
+f)
+- porównanie składni, to samo działanie.
+<p class="help is-danger">{{ $errors->firt('title') }}</p>
+<input class="input @error('title')  is-danger @enderror" type="text" name="title"  id="title">
 
 
+g)
+Usówamy błąd znikającego błędu, po wysłanu formularza
+- jeśli teraz usupełnimy tylko pole title i klikniemy, to odświeżony widok nie będzie pokazywał błędu w polu title
+tylko tą wartość którą wprowadziliśmy inne pola (pozostałe puste) będą w czerwonej ramce i z błędem
 
+BEFORE:
+                    <input
+                    class="input @error('title')  is-danger @enderror"
+                    type="text" name="title"
+                    id="title">
 
+AFTER:
+            <input
+                    class="input @error('title')  is-danger @enderror"
+                    type="text" name="title"
+                    id="title"
+                    value="{{ old('title') }}">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+h)
+W kontroleże w metodzie update również dodajemy walidacje.
 
 
 
