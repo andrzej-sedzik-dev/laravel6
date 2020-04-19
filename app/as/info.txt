@@ -532,7 +532,29 @@ array:4 [▼
 ]
 
 
-b)
+16)
+Forms EDIT - PUT REQUEST.
+http://localhost:8000/articles/5/edit
+Route::get('/articles/{article}/edit', 'ArticlesController@edit');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
