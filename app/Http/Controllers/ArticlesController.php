@@ -41,20 +41,38 @@ class ArticlesController extends Controller
     {
         // Persit the new resource (przechwytauje dane z formularzea create)
 
+
+/*
+        $article = new Article();
+        $article->title = request('title');
+        $article->excerpt = request('excerpt');
+        $article->body = request('body');
+        $article->save();
+*/
+
+/*
         request()->validate([
             'title' => 'required',
             'excerpt' => 'required',
             'body' => 'required'
         ]);
+*/
 
 
-        $article = new Article();
+        $validatedAttributes = $this->validateArticle();
 
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
+        /*
+                Article::create([
+                    'title' => request('title'),
+                    'excerpt' => request('excerpt'),
+                    'body' => request('body')
+                ]);
+        */
 
-        $article->save();
+
+        Article::create($validatedAttributes);
+
+
 
         return redirect('/articles');
 
@@ -72,17 +90,7 @@ class ArticlesController extends Controller
     {
         // Persist the edited resource.
 
-        request()->validate([
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
-
-        //$article = Article::find($id);
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
-        $article->save();
+        $article->update($this->validateArticle());
 
         return redirect('/articles/' . $article->id);
     }
@@ -90,6 +98,18 @@ class ArticlesController extends Controller
     public  function destroy ()
     {
         // Delete the resource
+    }
+
+    /**
+     * @return array
+     */
+    public function validateArticle(): array
+    {
+        return request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
     }
 
 }

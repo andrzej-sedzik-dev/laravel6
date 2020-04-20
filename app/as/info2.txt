@@ -91,3 +91,157 @@ class Article extends Model
 
 
 
+5)
+
+http://localhost:8000/articles/create
+- mamy pewne błędy nie możmy wysłać po zmianie.
+Add [title] to fillable property to allow mass assignment on [App\Article].
+- błąd ten oznacza że nieznany parametr został przekazany do requsta.
+
+
+    public  function store()
+    {
+        // Persit the new resource (przechwytauje dane z formularzea create)
+
+        request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
+
+/*
+        $article = new Article();
+        $article->title = request('title');
+        $article->excerpt = request('excerpt');
+        $article->body = request('body');
+        $article->save();
+*/
+
+
+        Article::create([
+            'title' => request('title'),
+            'excerpt' => request('excerpt'),
+            'body' => request('body')
+    ]);
+
+
+
+        return redirect('/articles');
+
+    }
+
+
+6)
+- teraz działa.
+- $guarded -> godzimy się na wszystkie pola.
+
+
+class Article extends Model
+{
+    protected $fillable = ['title', 'excerpt', 'body'] ; //User::create(request()->all() // ['name' => 'newname', 'subscriber' => true];
+    protected $guarded = [];
+
+}
+
+7) pozbywamy się duplikacji.
+
+BEFORE:
+
+    public  function store()
+    {
+        // Persit the new resource (przechwytauje dane z formularzea create)
+
+        request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
+        Article::create([
+            'title' => request('title'),
+            'excerpt' => request('excerpt'),
+            'body' => request('body')
+    ]);
+
+AFTER:
+- możemy to bardzo uprościć do takiego stanu:
+
+        $validatedAttributes = request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
+
+        Article::create($validatedAttributes);
+
+
+8)
+zmianay w metodzie update.
+
+BEFORE:
+
+    public  function update(Article $article)
+    {
+        // Persist the edited resource.
+
+        request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
+        //$article = Article::find($id);
+        $article->title = request('title');
+        $article->excerpt = request('excerpt');
+        $article->body = request('body');
+        $article->save();
+
+        return redirect('/articles/' . $article->id);
+    }
+
+
+AFTER:
+    public  function update(Article $article)
+    {
+        // Persist the edited resource.
+
+        $article->update(request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]));
+
+        return redirect('/articles/' . $article->id);
+    }
+
+9)
+Zaznacz prawy Refactor/to a method
+
+    /**
+     * @return array
+     */
+    public function validateArticle(): array
+    {
+        return request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+    }
+
+9a)
+update();
+$article->update($this->validateArticle());
+
+
+9b)
+store();
+$validatedAttributes = $this->validateArticle();
+Article::create($validatedAttributes);
+
+
+
+
+
