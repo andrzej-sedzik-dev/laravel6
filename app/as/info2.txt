@@ -1,0 +1,93 @@
+CONTROLLER -TECHNICS
+
+
+1)
+    public function show($id)
+    {
+        // show a single resource.
+
+        $article = Article::findOrFail($id);
+        return $article;
+        return view('articles.show', ['article' => $article]);
+    }
+
+1a)
+- bijemy od razu do przeglądarki.
+http://localhost:8000/articles/1
+{
+id: 1,
+    title: "Getting to Knowu us UPDATE",
+    excerpt: "Lorem ipsum to roboczy tekst używany do celów projektowych, zwykle do prezentacji kroju pisma, kompozycji, układu kolumn, wyglądu składu, typografii itd. Większość tekstów niesie ze sobą swoje znaczenie, które narzuca odbiorcy wpływ na ocenę wyglądu. Lorem ipsum nie przekazuje bezpośredniej treści, jest ambiwalentny, pozwalając tym samym skupić się odbiorcy wyłącznie na wyglądzie. Za pomocą tego generatora możesz stworzyć tekst z losowo rozłożonych wyrazów, który wygląda na gramatycznie poprawny, ale jego znaczenie jest zupełnie abstrakcyjne co pozwala na interpretację tekstu wyłącznie jako znaków graficznych, graficznej kompozycji złożonej z liter.",
+    body: "Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker",
+    created_at: "2020-04-18T16:25:13.000000Z",
+    updated_at: "2020-04-19T15:08:38.000000Z"
+}
+
+2)
+- dostajemy tę samą wartość a nie musimy przygotowywac zapytania.
+
+    public function show(Article $article)
+    {
+        // show a single resource.
+        //$article = Article::findOrFail($id);
+
+        return $article;
+        return view('articles.show', ['article' => $article]);
+    }
+
+http://localhost:8000/articles/1
+{
+id: 1,
+    title: "Getting to Knowu us UPDATE",
+    excerpt: "Lorem ipsum to roboczy tekst używany do celów projektowych, zwykle do prezentacji kroju pisma, kompozycji, układu kolumn, wyglądu składu, typografii itd. Większość tekstów niesie ze sobą swoje znaczenie, które narzuca odbiorcy wpływ na ocenę wyglądu. Lorem ipsum nie przekazuje bezpośredniej treści, jest ambiwalentny, pozwalając tym samym skupić się odbiorcy wyłącznie na wyglądzie. Za pomocą tego generatora możesz stworzyć tekst z losowo rozłożonych wyrazów, który wygląda na gramatycznie poprawny, ale jego znaczenie jest zupełnie abstrakcyjne co pozwala na interpretację tekstu wyłącznie jako znaków graficznych, graficznej kompozycji złożonej z liter.",
+    body: "Lorem Ipsum jest tekstem stosowanym jako przykładowy wypełniacz w przemyśle poligraficznym. Został po raz pierwszy użyty w XV w. przez nieznanego drukarza do wypełnienia tekstem próbnej książki. Pięć wieków później zaczął być używany przemyśle elektronicznym, pozostając praktycznie niezmienionym. Spopularyzował się w latach 60. XX w. wraz z publikacją arkuszy Letrasetu, zawierających fragmenty Lorem Ipsum, a ostatnio z zawierającym różne wersje Lorem Ipsum oprogramowaniem przeznaczonym do realizacji druków na komputerach osobistych, jak Aldus PageMaker",
+    created_at: "2020-04-18T16:25:13.000000Z",
+    updated_at: "2020-04-19T15:08:38.000000Z"
+}
+
+3)
+- nadal trybi choć tym razem przekazujemy do widoku.
+
+    public function show(Article $article)
+    {
+        // show a single resource.
+        // $article = Article::findOrFail($id);
+        // return $article;
+
+        return view('articles.show', ['article' => $article]);
+    }
+
+3a)
+Laravel działa tak:
+Chcesz artydkuł o id = $article (pobiera sobie) i zwarac pierwszą wartość.
+
+Route::get('/articles/{article}', 'ArticlesController@show');
+public function show(Article $article)
+Article:where('id', 1)->first();
+WORK - OK
+
+Route::get('/articles/{inna}', 'ArticlesController@show');
+NOT - WORK (so routing is importand).
+
+
+3b)
+Route::get('/articles/{inna}', 'ArticlesController@show');
+public function show(Article $inna )
+WORK - OK
+
+4)
+SLUG (kebab case).
+http://localhost:8000/articles/getting-tu-as
+
+a)
+class Article extends Model
+{
+    public function getRouteKeyName()
+    {
+        return 'slug'; // Article:where('slug', $article)->first();
+    }
+
+}
+
+
+
