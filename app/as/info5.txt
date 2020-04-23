@@ -1,0 +1,257 @@
+many-to-many:
+
+1)
+Article.php
+- dodajemy funkcję tags();
+
+AFTER:
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+2)
+php artisan make:model Tag -m
+    wiele artykułów może mieć wiele tagów.
+    wiele tagów może mieć wiele artykułów.
+- potrzebujemy do tego dodatkowej tabeli łączącej.
+
+
+3)
+
+
+class CreateTagsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('tags', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('article_tag', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('article_id');
+            $table->unsignedBigInteger('tag_id');
+            $table->timestamps();
+
+            $table->unique(['article_id', 'tag_id']);
+
+            $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+        });
+
+    }
+
+}
+
+4)
+php artisan migrate
+Migrating: 2020_04_23_184548_create_tags_table
+
+5)
+MyAdmin.
+mamy dwie nowe tabele:
+article_tag, tags
+
+
+6)
+modyfikujemy rekord nr 1 nadając tytuł learn laravel.
+
+id      1
+user_id 1
+title   LEARN LARAVEL
+
+
+7)
+w bazie danych dodajemy cztery rekordy z tagami tags: laravel, php, education, parsonal
+
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`) VALUES ('1', 'php', NOW(), NOW());
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`) VALUES ('2', 'laravel', NOW(), NOW());
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`) VALUES ('3', 'education', NOW(), NOW());
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`) VALUES ('4', 'personal', NOW(), NOW())
+
+
+8)
+Teraz modyfikujemy tabele łączącą atrykuły i tabele article_tag:
+INSERT INTO `article_tag` (`id`, `article_id`, `tag_id`, `created_at`, `updated_at`) VALUES
+ (NULL, '1', '1', NULL, NULL),
+ (NULL, '1', '2', NULL, NULL),
+ (NULL, '1', '3', NULL, NULL),
+ (NULL, '1', '4', NULL, NULL);
+
+przypisaliśmy wszystkie cztery artykuły userowi o id równym 1.
+
+9)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> $article = App\Article::first();
+=> App\Article {#3032
+     id: 1,
+     user_id: 1,
+     title: "LEART LARAVEL",
+     excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+     body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+     created_at: "2020-04-23 17:37:26",
+     updated_at: "2020-04-23 17:37:26",
+   }
+>>>
+
+10)
+>>> $article->tags;
+=> Illuminate\Database\Eloquent\Collection {#3033
+     all: [
+       App\Tag {#3026
+         id: 1,
+         name: "php",
+         created_at: "2020-04-23 21:10:11",
+         updated_at: "2020-04-23 21:10:11",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3023
+           article_id: 1,
+           tag_id: 1,
+         },
+       },
+       App\Tag {#3040
+         id: 2,
+         name: "laravel",
+         created_at: "2020-04-23 21:13:33",
+         updated_at: "2020-04-23 21:13:33",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3035
+           article_id: 1,
+           tag_id: 2,
+         },
+       },
+       App\Tag {#3041
+         id: 3,
+         name: "education",
+         created_at: "2020-04-23 21:14:08",
+         updated_at: "2020-04-23 21:14:08",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3027
+           article_id: 1,
+           tag_id: 3,
+         },
+       },
+       App\Tag {#3042
+         id: 4,
+         name: "personal",
+         created_at: "2020-04-23 21:14:25",
+         updated_at: "2020-04-23 21:14:25",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3037
+           article_id: 1,
+           tag_id: 4,
+         },
+       },
+     ],
+   }
+>>>
+
+
+11)
+>>> $article->tags->pluck('name')
+=> Illuminate\Support\Collection {#3048
+     all: [
+       "php",
+       "laravel",
+       "education",
+       "personal",
+     ],
+   }
+>>>
+
+12)
+BEFORE:
+class Tag extends Model
+{
+    //
+}
+
+13)
+AFTER:
+class Tag extends Model
+{
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class);
+    }
+}
+
+14)
+>>> $tag = App\Tag::first();
+=> App\Tag {#3032
+     id: 1,
+     name: "php",
+     created_at: "2020-04-23 21:10:11",
+     updated_at: "2020-04-23 21:10:11",
+   }
+>>>
+
+15)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> $tag = App\Tag::first();
+=> App\Tag {#3032
+     id: 1,
+     name: "php",
+     created_at: "2020-04-23 21:10:11",
+     updated_at: "2020-04-23 21:10:11",
+   }
+>>> $tag->articles;
+=> Illuminate\Database\Eloquent\Collection {#3033
+     all: [
+       App\Article {#3035
+         id: 1,
+         user_id: 1,
+         title: "LEART LARAVEL",
+         excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+         body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3027
+           tag_id: 1,
+           article_id: 1,
+         },
+       },
+     ],
+   }
+>>>
+
+16)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
