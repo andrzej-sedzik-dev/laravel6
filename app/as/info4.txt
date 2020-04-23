@@ -1,0 +1,409 @@
+1)
+
+BEFORE:
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+}
+
+
+2)
+- dodajemy metodę articles()
+
+AFTER:
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+
+}
+
+3)
+>>> App\User::find(1);
+=> App\User {#3031
+     id: 1,
+     name: "Cecelia Toy",
+     email: "kessler.marilyne@example.net",
+     email_verified_at: "2020-04-23 17:32:25",
+     created_at: "2020-04-23 17:32:25",
+     updated_at: "2020-04-23 17:32:25",
+   }
+>>>
+
+
+4)
+>>> $user = App\User::find(1);
+=> App\User {#3036
+     id: 1,
+     name: "Cecelia Toy",
+     email: "kessler.marilyne@example.net",
+     email_verified_at: "2020-04-23 17:32:25",
+     created_at: "2020-04-23 17:32:25",
+     updated_at: "2020-04-23 17:32:25",
+   }
+>>>
+
+5)
+- tutaj widizmy wszsytkie artykuły
+
+>>> $user->articles;
+=> Illuminate\Database\Eloquent\Collection {#3038
+     all: [
+       App\Article {#3039
+         id: 2,
+         user_id: 1,
+         title: "Nulla voluptatibus accusamus architecto vitae.",
+         excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+         body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3040
+         id: 3,
+         user_id: 1,
+         title: "Facere omnis voluptatem est doloribus voluptas.",
+         excerpt: "Laudantium quisquam dolores quia sunt sint quibusdam et.",
+         body: "Perspiciatis quo ullam nostrum rerum. Modi et impedit omnis quia aliquam non. Ut voluptatum dolores ut occaecati quia quasi optio. Ipsam quisquam perferendis assumenda dolorem.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3041
+         id: 4,
+         user_id: 1,
+         title: "Quia nobis molestias nesciunt voluptatem sequi et expedita officia.",
+         excerpt: "Odio sunt mollitia adipisci illo earum.",
+         body: "Fugit maxime ut et blanditiis tempore. Quasi commodi labore eos incidunt iste. Necessitatibus eos in amet quod illo.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3042
+         id: 5,
+         user_id: 1,
+         title: "Necessitatibus et omnis consequatur ea.",
+         excerpt: "Ea deserunt incidunt sunt at.",
+         body: "Eveniet blanditiis ipsum omnis voluptatem ut sint. Fugit id unde aperiam provident atque. Aut enim est quaerat eligendi assumenda quam.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+     ],
+   }
+>>>
+
+------------------------------------------------------------------------------------------------------------------------
+zmeniłem bazę danych tak by user_id =1 było równe id = 1
+
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+1
+1
+Nulla voluptatibus accusamus architecto vitae.
+Et aut possimus vel non doloribus incidunt qui.
+Rerum nisi totam voluptatem id. Repudiandae esse v...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+3
+1
+Facere omnis voluptatem est doloribus voluptas.
+Laudantium quisquam dolores quia sunt sint quibusd...
+Perspiciatis quo ullam nostrum rerum. Modi et impe...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+4
+1
+Quia nobis molestias nesciunt voluptatem sequi et ...
+Odio sunt mollitia adipisci illo earum.
+Fugit maxime ut et blanditiis tempore. Quasi commo...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+5
+1
+Necessitatibus et omnis consequatur ea.
+Ea deserunt incidunt sunt at.
+Eveniet blanditiis ipsum omnis voluptatem ut sint....
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+----------------------------------------------------------------------------------------------------------------------
+6)
+>>> App\Article::find(1);
+=> null
+>>>
+
+
+7)
+>>> App\Article::find(1)->user;
+=> null
+>>>
+
+8)
+Article.php
+BEFORE:
+
+class Article extends Model
+{
+    //protected $fillable = ['title', 'excerpt', 'body'] ;
+    protected $guarded = []; // wsztkie pola są dostępne
+}
+
+AFTER:
+class Article extends Model
+{
+    //protected $fillable = ['title', 'excerpt', 'body'] ;
+    protected $guarded = []; // wsztkie pola są dostępne
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+
+9)
+restart exacly tinker and do:
+
+>>> App\Article::find(1)
+=> App\Article {#3039
+     id: 1,
+     user_id: 1,
+     title: "Nulla voluptatibus accusamus architecto vitae.",
+     excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+     body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+     created_at: "2020-04-23 17:37:26",
+     updated_at: "2020-04-23 17:37:26",
+   }
+>>>
+
+>>> App\Article::find(1)->user;
+=> App\User {#3041
+     id: 1,
+     name: "Cecelia Toy",
+     email: "kessler.marilyne@example.net",
+     email_verified_at: "2020-04-23 17:32:25",
+     created_at: "2020-04-23 17:32:25",
+     updated_at: "2020-04-23 17:32:25",
+   }
+>>>
+
+10)
+Wprowadzamy pewne zmiany dla testu.
+
+BEFORE:
+class Article extends Model
+{
+    //protected $fillable = ['title', 'excerpt', 'body'] ;
+    protected $guarded = []; // wsztkie pola są dostępne
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+
+AFTER:
+class Article extends Model
+{
+    //protected $fillable = ['title', 'excerpt', 'body'] ;
+    protected $guarded = []; // wsztkie pola są dostępne
+
+    public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+
+
+11)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> App\Article::find(1)->author;
+=> null
+>>>
+
+12)
+- larawel wcześniej szukał user_id i znalezł, a po zmianie szukał authro_id i nie znalazł.
+
+13)
+Jeśli chcemy nadpisać user_id możemy to zrobić w drugim argumencie.
+
+
+14)
+AFTER:
+class Article extends Model
+{
+    //protected $fillable = ['title', 'excerpt', 'body'] ;
+    protected $guarded = []; // wsztkie pola są dostępne
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}
+
+
+
+
+
+15)
+>>> App\Article::find(1);
+=> App\Article {#3035
+     id: 1,
+     user_id: 1,
+     title: "Nulla voluptatibus accusamus architecto vitae.",
+     excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+     body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+     created_at: "2020-04-23 17:37:26",
+     updated_at: "2020-04-23 17:37:26",
+   }
+>>>
+
+
+
+16)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> App\Article::find(1)->author;
+=> App\User {#3034
+     id: 1,
+     name: "Cecelia Toy",
+     email: "kessler.marilyne@example.net",
+     email_verified_at: "2020-04-23 17:32:25",
+     created_at: "2020-04-23 17:32:25",
+     updated_at: "2020-04-23 17:32:25",
+   }
+>>>
+
+
+17)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

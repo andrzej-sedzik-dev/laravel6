@@ -1,0 +1,602 @@
+ELOQUENT
+
+1) FOREIN->KEY
+
+a)
+$table->bigIncrements('id');
+
+
+class CreateArticlesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('articles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->text('excerpt');
+            $table->text('body');
+            $table->timestamps();
+        });
+    }
+
+
+b)
+$table->bigIncrements('id');
+
+
+class CreateUsersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+
+
+2)
+>>> factory(App\User::class)->create();
+
+=> App\User {#3056
+     name: "Kelsie Lockman",
+     email: "eileen.stroman@example.com",
+     email_verified_at: "2020-04-23 16:48:02",
+     updated_at: "2020-04-23 16:48:02",
+     created_at: "2020-04-23 16:48:02",
+     id: 1,
+   }
+
+3)
+MyAdmin
+
+Kelsie Lockman
+eileen.stroman@example.com
+2020-04-23 16:48:02
+$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2...
+JpFNzG9NkG
+2020-04-23 16:48:02
+2020-04-23 16:48:02
+
+4)
+
+>>> factory(App\User::class)->create();
+=> App\User {#3075
+     name: "Madie Terry",
+     email: "kari.nolan@example.org",
+     email_verified_at: "2020-04-23 16:52:32",
+     updated_at: "2020-04-23 16:52:32",
+     created_at: "2020-04-23 16:52:32",
+     id: 2,
+   }
+>>> factory(App\User::class)->create();
+=> App\User {#3057
+     name: "Prof. Arlene Murphy",
+     email: "senger.noemy@example.org",
+     email_verified_at: "2020-04-23 16:52:35",
+     updated_at: "2020-04-23 16:52:35",
+     created_at: "2020-04-23 16:52:35",
+     id: 3,
+   }
+
+5)
+- how many fake data you wont -> 5 in second argument.
+>>> factory(App\User::class, 5)->create();
+
+
+
+6)
+>>> factory(App\Article::class, 5)->create();
+InvalidArgumentException with message 'Unable to locate factory for [App/Article].'
+- nie mamy Article Factory.
+
+
+7)
+php artisan make:factory ArticleFactory
+
+$factory->define(Model::class, function (Faker $faker) {
+    return [
+        //
+    ];
+});
+
+8)
+$factory->define(Article::class, function (Faker $faker) {
+    return [
+        //
+    ];
+});
+
+9)
+
+$factory->define(Article::class, function (Faker $faker) {
+    return [
+        'user_id' => factory(\App\User::class),
+        'title' => $faker->sentence,
+        'excerpt' => $faker->sentence,
+        'body' => $faker->paragraph
+    ];
+});
+
+
+10)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> factory(App\Article::class, 5)->create();
+=> Illuminate\Database\Eloquent\Collection {#3051
+     all: [
+       App\Article {#3047
+         user_id: 13,
+         title: "Soluta fugit qui eos explicabo.",
+         excerpt: "Qui aut inventore eum enim quia ab.",
+         body: "Aspernatur nobis labore voluptas esse assumenda nisi. Dolorum assumenda ipsam eligendi reprehenderit. Quidem consequatur consequatur tempore nesciunt inventore nesciunt ipsa.",
+         updated_at: "2020-04-23 17:14:59",
+         created_at: "2020-04-23 17:14:59",
+         id: 1,
+       },
+       App\Article {#3045
+         user_id: 14,
+         title: "Perspiciatis cum recusandae culpa nostrum eius voluptas aut.",
+         excerpt: "Doloribus pariatur eveniet est animi reiciendis similique qui.",
+         body: "Qui et commodi nulla tempore in dignissimos. Incidunt ad voluptates iste aspernatur et ullam. Accusantium aperiam aut eum vero in natus.",
+         updated_at: "2020-04-23 17:14:59",
+         created_at: "2020-04-23 17:14:59",
+         id: 2,
+       },
+       App\Article {#3042
+         user_id: 15,
+         title: "Fuga enim et dignissimos.",
+         excerpt: "Fugit qui eum numquam totam est et et.",
+         body: "Mollitia vero excepturi molestiae occaecati dolor vitae. Voluptatem hic temporibus occaecati maiores et quos est. Quibusdam suscipit aut ab. Non blanditiis sed et.",
+         updated_at: "2020-04-23 17:14:59",
+         created_at: "2020-04-23 17:14:59",
+         id: 3,
+       },
+       App\Article {#3046
+         user_id: 16,
+         title: "Sed nemo rem id omnis iste neque.",
+         excerpt: "Quo quam ipsa delectus consequatur distinctio at sit.",
+         body: "Dolorum hic autem et dignissimos. Necessitatibus ut dicta architecto et et. In aliquam aut consequuntur sequi et excepturi.",
+         updated_at: "2020-04-23 17:14:59",
+         created_at: "2020-04-23 17:14:59",
+         id: 4,
+       },
+       App\Article {#3048
+         user_id: 17,
+         title: "Vitae occaecati architecto excepturi nihil sequi et.",
+         excerpt: "Maiores ut aut neque ut aut.",
+         body: "Reprehenderit debitis sit voluptatum dolorum ullam. Neque aut est soluta sed eveniet. Ad quo velit modi provident quo occaecati laudantium.",
+         updated_at: "2020-04-23 17:14:59",
+         created_at: "2020-04-23 17:14:59",
+         id: 5,
+       },
+     ],
+   }
+
+
+
+11)
+>>> factory(App\Article::class, 5)->create(['title' => 'Override the title']);
+=> Illuminate\Database\Eloquent\Collection {#3070
+     all: [
+       App\Article {#3074
+         user_id: 18,
+         title: "Override the title",
+         excerpt: "Recusandae eum consequatur nostrum magni ut.",
+         body: "Sed nemo ipsa provident quia consectetur autem. Perferendis sit beatae provident vero dignissimos. Enim sunt a quisquam non enim omnis nulla sed. Est adipisci id eos eaque blanditiis nulla.",
+         updated_at: "2020-04-23 17:17:50",
+         created_at: "2020-04-23 17:17:50",
+         id: 6,
+       },
+       App\Article {#3073
+         user_id: 19,
+         title: "Override the title",
+
+12)
+Problem w tym że możemy usunąć userów a ich artykuły pozostaną.
+
+BEFORE:
+
+    public function up()
+    {
+        Schema::create('articles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->text('excerpt');
+            $table->text('body');
+            $table->timestamps();
+        });
+    }
+
+AFTER:
+
+    public function up()
+    {
+        Schema::create('articles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->text('excerpt');
+            $table->text('body');
+            $table->timestamps();
+
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+        });
+    }
+
+
+12a)
+Teraz jeśli będziemy chcieli usunąć artykuł automatcznie (kaskadowo) usuniemy usera który go dodał.
+
+>>> factory(App\Article::class, 2)->create();
+=> Illuminate\Database\Eloquent\Collection {#3051
+     all: [
+       App\Article {#3047
+         user_id: 1,
+         title: "Est occaecati ut et eaque maxime voluptas.",
+         excerpt: "Sed est et provident at eius sed.",
+         body: "Voluptatem laudantium iure itaque vel ab sit. Hic dicta perferendis eaque dolor quia. Ut at consequuntur qui quo ratione soluta.",
+         updated_at: "2020-04-23 17:28:00",
+         created_at: "2020-04-23 17:28:00",
+         id: 1,
+       },
+       App\Article {#3045
+         user_id: 2,
+         title: "Voluptatem suscipit omnis neque ab repellendus enim et.",
+         excerpt: "Natus eos omnis quo praesentium laudantium est.",
+         body: "Consectetur deserunt labore quisquam recusandae. Sit qui minima accusamus optio non. Sequi perferendis fugit ea adipisci voluptatem consequatur facilis.",
+         updated_at: "2020-04-23 17:28:00",
+         created_at: "2020-04-23 17:28:00",
+         id: 2,
+       },
+     ],
+   }
+>>>
+
+13)
+c:\dev\best\back\laravel\laracasts\laravel6>php artisan tinker
+Psy Shell v0.10.3 (PHP 7.4.4 — cli) by Justin Hileman
+>>> factory(App\User::class, 2)->create();
+=> Illuminate\Database\Eloquent\Collection {#3051
+     all: [
+       App\User {#3047
+         name: "Cecelia Toy",
+         email: "kessler.marilyne@example.net",
+         email_verified_at: "2020-04-23 17:32:25",
+         updated_at: "2020-04-23 17:32:25",
+         created_at: "2020-04-23 17:32:25",
+         id: 1,
+       },
+       App\User {#3043
+         name: "Prof. Bobbie Strosin",
+         email: "charity88@example.com",
+         email_verified_at: "2020-04-23 17:32:25",
+         updated_at: "2020-04-23 17:32:25",
+         created_at: "2020-04-23 17:32:25",
+         id: 2,
+       },
+     ],
+   }
+>>>
+
+14)
+MyAdmin
+-----------------------
+1
+Cecelia Toy
+kessler.marilyne@example.net
+2020-04-23 17:32:25
+$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2...
+18O0MNNP3G
+2020-04-23 17:32:25
+2020-04-23 17:32:25
+--------------------------
+2
+Prof. Bobbie Strosin
+charity88@example.com
+2020-04-23 17:32:25
+$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2...
+3QCuQHIgg1
+2020-04-23 17:32:25
+2020-04-23 17:32:25
+------------------------
+
+15)
+>>> factory(App\Article::class, 5)->create(['user_id' => 1]);
+=> Illuminate\Database\Eloquent\Collection {#3069
+     all: [
+       App\Article {#3065
+         user_id: 1,
+         title: "Velit alias labore sit error natus et architecto.",
+         excerpt: "Labore cupiditate voluptates saepe quasi accusantium eligendi inventore ipsa.",
+         body: "Atque delectus quas dolorem et magnam ut. Quam sed possimus enim eos nisi doloribus. Eos aspernatur in aliquam temporibus quasi quia esse magni. Animi aut ex reprehenderit rerum qui animi.",
+         updated_at: "2020-04-23 17:37:26",
+         created_at: "2020-04-23 17:37:26",
+         id: 1,
+       },
+       App\Article {#3042
+         user_id: 1,
+         title: "Nulla voluptatibus accusamus architecto vitae.",
+         excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+         body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+         updated_at: "2020-04-23 17:37:26",
+         created_at: "2020-04-23 17:37:26",
+         id: 2,
+       },
+       App\Article {#3049
+         user_id: 1,
+         title: "Facere omnis voluptatem est doloribus voluptas.",
+         excerpt: "Laudantium quisquam dolores quia sunt sint quibusdam et.",
+         body: "Perspiciatis quo ullam nostrum rerum. Modi et impedit omnis quia aliquam non. Ut voluptatum dolores ut occaecati quia quasi optio. Ipsam quisquam perferendis assumenda dolorem.",
+         updated_at: "2020-04-23 17:37:26",
+         created_at: "2020-04-23 17:37:26",
+         id: 3,
+       },
+       App\Article {#3055
+         user_id: 1,
+         title: "Quia nobis molestias nesciunt voluptatem sequi et expedita officia.",
+         excerpt: "Odio sunt mollitia adipisci illo earum.",
+         body: "Fugit maxime ut et blanditiis tempore. Quasi commodi labore eos incidunt iste. Necessitatibus eos in amet quod illo.",
+         updated_at: "2020-04-23 17:37:26",
+         created_at: "2020-04-23 17:37:26",
+         id: 4,
+       },
+       App\Article {#3052
+         user_id: 1,
+         title: "Necessitatibus et omnis consequatur ea.",
+         excerpt: "Ea deserunt incidunt sunt at.",
+         body: "Eveniet blanditiis ipsum omnis voluptatem ut sint. Fugit id unde aperiam provident atque. Aut enim est quaerat eligendi assumenda quam.",
+         updated_at: "2020-04-23 17:37:26",
+         created_at: "2020-04-23 17:37:26",
+         id: 5,
+       },
+     ],
+   }
+>>>
+
+16)
+>>> factory(App\Article::class, 3)->create(['user_id' => 2]);
+=> Illuminate\Database\Eloquent\Collection {#3057
+     all: [
+       App\Article {#3075
+         user_id: 2,
+         title: "Voluptas recusandae est qui et corporis.",
+         excerpt: "Est rerum aut et sed beatae quo.",
+         body: "Mollitia quo qui et ut. Mollitia quod asperiores cumque commodi officiis est sequi. Aliquid et fugit iure est aut ducimus. Voluptatem ipsum consequuntur debitis id hic.",
+         updated_at: "2020-04-23 17:38:12",
+         created_at: "2020-04-23 17:38:12",
+         id: 6,
+       },
+       App\Article {#3077
+         user_id: 2,
+         title: "Quidem quam error deserunt quis accusamus aut et sapiente.",
+         excerpt: "Ullam unde eaque est et consequatur blanditiis est aut.",
+         body: "Laudantium eveniet voluptates ut dolorem ex. Tenetur occaecati dolores maxime corrupti est qui. Quos quia maxime et rerum quia corrupti est. Ex blanditiis reiciendis porro omnis.",
+         updated_at: "2020-04-23 17:38:12",
+         created_at: "2020-04-23 17:38:12",
+         id: 7,
+       },
+       App\Article {#3047
+         user_id: 2,
+         title: "Perferendis eum harum a magni.",
+         excerpt: "Error consequuntur accusamus sequi quam commodi.",
+         body: "Voluptatem et nihil consectetur ut nihil reiciendis. Quae quam perspiciatis voluptate omnis consequuntur. Ea a ut quidem culpa.",
+         updated_at: "2020-04-23 17:38:12",
+         created_at: "2020-04-23 17:38:12",
+         id: 8,
+       },
+     ],
+   }
+>>>
+
+
+17)
+We have got 8 articles writed by dwo users:
+MyAdmin:
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+1
+1
+Velit alias labore sit error natus et architecto.
+Labore cupiditate voluptates saepe quasi accusanti...
+Atque delectus quas dolorem et magnam ut. Quam sed...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+2
+1
+Nulla voluptatibus accusamus architecto vitae.
+Et aut possimus vel non doloribus incidunt qui.
+Rerum nisi totam voluptatem id. Repudiandae esse v...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+3
+1
+Facere omnis voluptatem est doloribus voluptas.
+Laudantium quisquam dolores quia sunt sint quibusd...
+Perspiciatis quo ullam nostrum rerum. Modi et impe...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+4
+1
+Quia nobis molestias nesciunt voluptatem sequi et ...
+Odio sunt mollitia adipisci illo earum.
+Fugit maxime ut et blanditiis tempore. Quasi commo...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+5
+1
+Necessitatibus et omnis consequatur ea.
+Ea deserunt incidunt sunt at.
+Eveniet blanditiis ipsum omnis voluptatem ut sint....
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+6
+2
+Voluptas recusandae est qui et corporis.
+Est rerum aut et sed beatae quo.
+Mollitia quo qui et ut. Mollitia quod asperiores c...
+2020-04-23 17:38:12
+2020-04-23 17:38:12
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+7
+2
+Quidem quam error deserunt quis accusamus aut et s...
+Ullam unde eaque est et consequatur blanditiis est...
+Laudantium eveniet voluptates ut dolorem ex. Tenet...
+2020-04-23 17:38:12
+2020-04-23 17:38:12
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+8
+2
+Perferendis eum harum a magni.
+Error consequuntur accusamus sequi quam commodi.
+Voluptatem et nihil consectetur ut nihil reiciendi...
+2020-04-23 17:38:12
+2020-04-23 17:38:12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18)
+MyAdmin
+jeśli usuniemy usera, zostaną usunięte także wszystkie przypisane do niego artykuły.
+Czy na pewno chcesz wykonać "DELETE FROM `users` WHERE `users`.`id` = 2"?
+- pozostały tylko artykuły których właścicielem jest user nr 1
+- po usunięciu usera nr 2 jego artykuły tak jak i on już nie istnieją.
+
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+2
+1
+Nulla voluptatibus accusamus architecto vitae.
+Et aut possimus vel non doloribus incidunt qui.
+Rerum nisi totam voluptatem id. Repudiandae esse v...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+3
+1
+Facere omnis voluptatem est doloribus voluptas.
+Laudantium quisquam dolores quia sunt sint quibusd...
+Perspiciatis quo ullam nostrum rerum. Modi et impe...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+4
+1
+Quia nobis molestias nesciunt voluptatem sequi et ...
+Odio sunt mollitia adipisci illo earum.
+Fugit maxime ut et blanditiis tempore. Quasi commo...
+2020-04-23 17:37:26
+2020-04-23 17:37:26
+
+Edytuj Edytuj
+Kopiuj Kopiuj
+Usuń Usuń
+5
+1
+Necessitatibus et omnis consequatur ea.
+Ea deserunt incidunt sunt at.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

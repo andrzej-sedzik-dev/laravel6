@@ -242,6 +242,8 @@ $validatedAttributes = $this->validateArticle();
 Article::create($validatedAttributes);
 
 
-
-
+10)
+Consider named routes:
+Route::get('/articles/{article}', 'ArticlesController@show');
+Route::get('/articles/{article}', 'ArticlesController@show')->name('articles.show');
 
