@@ -1,0 +1,225 @@
+Foreach
+
+1)
+ArticleController.php
+sow.blade.php
+
+BEFORE:
+@extends('layout')
+
+
+
+@section('content')
+    <div id="wrapper">
+        <div id="page" class="container">
+            <div id="content">
+                <div class="title">
+                    <h2>Welcome to our website</h2>
+                    <span class="byline">Mauris vulputate dolor sit amet nibh</span> </div>
+                <p><img src="images/banner.jpg" alt="" class="image image-full" /> </p>
+            </div>
+        </div>
+    </div>
+@endsection
+
+AFTER:
+@extends('layout')
+
+
+
+@section('content')
+    <div id="wrapper">
+        <div id="page" class="container">
+            <div id="content">
+                <div class="title">
+                    <h2>Welcome to our website</h2>
+                    <span class="byline">Mauris vulputate dolor sit amet nibh</span> </div>
+                <p><img src="images/banner.jpg" alt="" class="image image-full" /> </p>
+
+
+                <p>
+                    @foreach($article->tags as $tag)
+                        <a href="#">{{ $tag->name }}</a>
+                    @endforeach
+                </p>
+
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+
+
+2)
+http://localhost:8000/articles/1
+- mamy pod spodem artykułu linki do tagów.
+
+
+Welcome to our website
+MAURIS VULPUTATE DOLOR SIT AMET NIBH
+
+php laravel education personal
+
+
+3)
+                <p style="margin: 1em">
+                    @foreach($article->tags as $tag)
+                        <a href="/articles?tag={{ $tag->name }}">{{ $tag->name }}</a>
+                    @endforeach
+                </p>
+
+
+4)
+ArticleController
+
+BEFORE:
+    public function index()
+    {
+        // show a list of resource.
+        $articles = Article::all();
+        return view('articles.index', ['articles' => $articles]);
+    }
+
+AFTER:
+    public function index()
+    {
+        // show a list of resource.
+
+        if (request('tag')){
+            $articles = Tag::where('name', request('tag'))->firstOrFail()->articles;
+
+            return $articles;
+        }
+
+
+        $articles = Article::all();
+        return view('articles.index', ['articles' => $articles]);
+    }
+
+
+5)
+http://127.0.0.1:8000/articles?tag=laravel
+[
+    {
+        id: 1,
+        user_id: 1,
+        title: "LEART LARAVEL",
+        excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+        body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+        created_at: "2020-04-23T17:37:26.000000Z",
+        updated_at: "2020-04-23T17:37:26.000000Z",
+            pivot: {
+            tag_id: 2,
+            article_id: 1
+            }
+        }
+]
+
+6)
+- artykuły
+- pojedyńczy artykuł
+- tag (odnośnik) do szczegułu artykułu.
+
+    public function index()
+    {
+        // show a list of resource.
+
+        if (request('tag')){
+            $articles = Tag::where('name', request('tag'))->firstOrFail()->articles;
+        } else {
+            $articles = Article::latest()->get;
+        }
+
+        $articles = Article::all();
+        return view('articles.index', ['articles' => $articles]);
+    }
+
+
+7)
+index.blade.php
+
+BEFORE:
+@section('content')
+    <div id="wrapper">
+        <div id="page" class="container">
+            <div id="content">
+                @foreach($articles as $article)
+                    <h3 class="heading has-text-weight-bold is-size-4">
+                        <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                    </h3>
+
+                    <p>
+                        <img
+                            src="/images/banner.jpg"
+                            alt=""
+                            class="image image-full"
+                        />
+                    </p>
+
+                    <p>{{ $article->excerpt }}</p>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@endsection
+
+8)
+ma pokazać info o braku artykułów gdy takowych nie ma.
+
+
+AFTER:
+@section('content')
+    <div id="wrapper">
+        <div id="page" class="container">
+
+            @forelse($articles as $article)
+            <div id="content">
+                <div class="title">
+
+                    <h3 class="heading has-text-weight-bold is-size-4">
+                        <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                    </h3>
+
+                    <p>
+                        <img
+                            src="/images/banner.jpg"
+                            alt=""
+                            class="image image-full"
+                        />
+                    </p>
+
+                    <p>{{ $article->excerpt }}</p>
+
+                </div>
+
+
+                @empty
+                    <p>No relevent article yet.</p>
+                @endforelse
+            </div>
+        </div>
+@endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
