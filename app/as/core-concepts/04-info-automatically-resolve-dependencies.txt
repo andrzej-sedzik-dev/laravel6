@@ -1,0 +1,438 @@
+Prawdziwy kontener Laravela.
+
+1)
+Create app\Example.class
+Example{}
+
+2)
+web.php
+app()->bind('example', function(){
+    return new \App\Example();
+});
+
+
+Route::get('/', function (){
+
+});
+
+
+3)
+app()->bind('example', function(){
+    return new \App\Example();
+});
+
+
+Route::get('/', function (){
+    $example = resolve('example');
+    ddd($example);
+
+});
+
+4)
+Dump, Die, Debug
+
+5)
+class Example
+{
+    protected $foo;
+
+    public function __construct($foo)
+    {
+        $this->foo = $foo;
+    }
+
+}
+
+6)
+config/services.php
+add foo.
+...
+
+    'ses' => [
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+
+    'foo' => 'value'
+
+];
+
+7)
+info
+Dump, Die, Debug
+
+App\Example {#248 ▼
+  #foo: "value"
+}
+
+8)
+class Example{}
+
+
+9)
+app()->bind('example', function(){
+    return new \App\Example();
+});
+
+
+Route::get('/', function (){
+    $example = resolve('example');
+    ddd($example);
+
+});
+
+10)
+http://127.0.0.1:8000/
+Dump, Die, Debug
+App\Example {#248}
+
+
+11)
+web.php
+
+Route::get('/', function (){
+    $example = resolve(App\Example::class);
+    ddd($example);
+
+});
+
+
+12)
+- nadal mamay dostęp do Example
+
+http://127.0.0.1:8000/
+Dump, Die, Debug
+App\Example {#248}
+
+
+13)
+Colabolator.class
+
+class Colaborator{}
+
+14)
+
+class Example
+{
+    protected $collabolator;
+
+    public function __construct(Collaborator $collabolator)
+    {
+        $this->collabolator = $collabolator;
+    }
+
+}
+
+15)
+App\Example {#250 ▼
+  #collabolator: App\Collaborator {#251}
+}
+
+
+16)
+
+
+    Route::get('/', function (){
+        $example = resolve(App\Example::class);
+        ddd($example);
+
+    });
+
+
+17)
+
+    Route::get('/', function (){
+        $example = app()->make(App\Example::class);
+        ddd($example);
+    });
+
+
+18)
+- ten sam wynik co wcześniej.
+App\Example {#250 ▼
+  #collabolator: App\Collaborator {#251}
+
+
+19)
+Route::get('/', function (App\Example $example){
+    //$example = app()->make(App\Example::class);
+    ddd($example);
+});
+
+
+20)
+App\Example {#254 ▼
+  #collabolator: App\Collaborator {#255}
+}
+
+21)
+php artisan make:controller PagesController
+
+
+22)
+web.php
+Route::get('/', 'PagesController@home');
+
+23)
+class PagesController extends Controller
+{
+    public function home(Example $example)
+    {
+        ddd($example);
+    }
+}
+
+24)
+App\Example {#254 ▼
+  #collabolator: App\Collaborator {#255}
+}
+
+
+
+25)
+- add foo
+Example.php
+
+class Example
+{
+    protected $collabolator;
+    protected $foo;
+
+    public function __construct(Collaborator $collabolator, $foo)
+    {
+        $this->collabolator = $collabolator;
+        $this->foo = $foo;
+    }
+
+}
+
+26)
+Illuminate\Contracts\Container\BindingResolutionException
+Unresolvable dependency resolving [Parameter #1 [ <required> $foo ]] in class App\Example
+
+Ok - Colabolator był w zasięgu ale nie wiem co mam zrobić z $foo,
+nie wiem czy to numer czy co to jest, dlatego żucam BindingResolutionException.
+
+OK - chciałbym rozpoznać gdzie znajduje się $foo i jak ci je dostarczyć ale nie wiem jak...
+!! proszę poinformuj mnie jak to zrobić.
+
+27)
+- to ci mówie zrób to tak
+web.php
+Route::get('/', 'PagesController@home');
+
+
+AFTER:
+app()->bind('App\Example', function (){
+
+$collabolator = new \App\Collaborator();
+
+$foo = 'foobar';
+    return new \App\Example($collabolator, $foo);
+});
+
+Route::get('/', 'PagesController@home');
+
+
+
+28)
+App\Example {#254 ▼
+  #collabolator: App\Collaborator {#253}
+  #foo: "foobar"
+}
+
+
+29)
+- wycinamy to
+web.php
+Route::get('/', 'PagesController@home');
+
+
+
+30)
+- wklejamy do
+App/Providers/AppServiceProviders.php
+
+        app()->bind('App\Example', function (){
+
+        $collabolator = new \App\Collaborator();
+
+        $foo = 'foobar';
+            return new \App\Example($collabolator, $foo);
+        });
+
+
+
+31)
+metoda register rejestruje servisy w kontenerze servisów
+
+
+<?php
+namespace App\Providers;
+use App\Collaborator;
+use App\Example;
+
+use Illuminate\Support\ServiceProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Register any application services.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            app()->bind('App\Example', function (){
+
+                $collabolator = new Collaborator();
+
+                $foo = 'foobar';
+                return new Example($collabolator, $foo);
+            });
+
+        }
+    }
+
+32)
+- ciągle działa:
+
+App\Example {#253 ▼
+  #collabolator: App\Collaborator {#252}
+  #foo: "foobar"
+}
+
+33)
+Możemy to zarejestrować w AppServicePRovider w metodzie register, a możemy też wykorzystać inny provider.
+
+BEFORE: app()->bind('App\Example', function (){
+AFTER:  $this->app->bind('App\Example', function (){
+
+AFTER:
+
+    public function register()
+    {
+        $this->app->bind('App\Example', function (){
+
+            $collabolator = new Collaborator();
+
+            $foo = 'foobar';
+            return new Example($collabolator, $foo);
+        });
+
+    }
+
+
+34)
+ServiceProvider.php
+- mamy tutaj instacje aplikacji
+
+abstract class ServiceProvider
+{
+
+    /**
+     * The application instance.
+     *
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    protected $app;
+
+}
+
+35)
+- still works:
+App\Example {#253 ▼
+  #collabolator: App\Collaborator {#252}
+  #foo: "foobar"
+}
+
+
+36)
+Czasem nie potrzebujesz nowej instancji tylko tej samej:
+AppServiceProvider.php
+
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton('App\Example', function (){
+
+            $collabolator = new Collaborator();
+
+            $foo = 'foobar';
+            return new Example($collabolator, $foo);
+        });
+
+    }
+
+37)
+PagesController.php
+
+BEFORE:
+public function home(Example $example)
+    {
+        ddd($example);
+    }
+
+AFTER:
+class PagesController extends Controller
+{
+    public function home()
+    {
+        ddd(resolve('App\Example'), resolve('App\Example'));
+    }
+}
+
+
+38)
+info
+Dump, Die, Debug
+
+Dump
+Content
+App\Example {#222 ▼
+  #collabolator: App\Collaborator {#248}
+  #foo: "foobar"
+}
+Location
+C:\dev\best\back\laravel\laracasts\laravel6\vendor\facade\ignition\src\helpers.php:12
+Dump
+Content
+App\Example {#222 ▼
+  #collabolator: App\Collaborator {#248}
+  #foo: "foobar"
+}
+Location
+C:\dev\best\back\laravel\laracasts\laravel6\vendor\facade\ignition\src\helpers.php:12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

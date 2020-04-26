@@ -82,16 +82,11 @@ Route::get('/contact',  function (){
     return view('contact') ;
 });*/
 
-Route::get('/',  function (){
-    return view('welcome') ;
-});
-
 /*Route::get('/about',  function (){
     $article = \App\Article::latest()->get();
     return $article;
     return view('about') ;
 });*/
-
 
 /*Route::get('/about',  function (){
     $articles = \App\Article::latest()->get();
@@ -108,27 +103,28 @@ Route::get('/articles/{article}', 'ArticlesController@show')->name('articles.sho
 Route::get('/articles/{article}/edit', 'ArticlesController@edit');
 Route::put('/articles/{article}', 'ArticlesController@update');*/
 
-
-
-    Route::get('/', function (){
-
-        $container = new \App\Container();
-
-        $container->bind('example', function (){
-            return new \App\Example();
-        });
-
-            $example = $container->resolve('example');
-            $example->go();
-
-    });
+/*Route::get('/',  function (){
+    return view('welcome') ;
+});*/
 
 
 
+/*app()->bind('example', function(){
+    return new \App\Example();
+});*/
+
+
+/*Route::get('/', function (App\Example $example){
+    //$example = app()->make(App\Example::class);
+    ddd($example);
+});*/
 
 
 
 
+
+
+Route::get('/', 'PagesController@home');
 
 
 

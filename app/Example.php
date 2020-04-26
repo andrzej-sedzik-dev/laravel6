@@ -6,8 +6,13 @@ namespace App;
 
 class Example
 {
-    public function go()
+    protected $collabolator;
+    protected $foo;
+
+    public function __construct(Collaborator $collabolator, $foo)
     {
-        dump('it works');
+        $this->collabolator = $collabolator;
+        $this->foo = $foo;
     }
+
 }
