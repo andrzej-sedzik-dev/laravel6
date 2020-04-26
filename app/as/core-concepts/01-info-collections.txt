@@ -1,0 +1,426 @@
+1)
+
+>>> App\Article::first();
+=> App\Article {#3032
+     id: 1,
+     user_id: 1,
+     title: "LEART LARAVEL",
+     excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+     body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+     created_at: "2020-04-23 17:37:26",
+     updated_at: "2020-04-23 17:37:26",
+   }
+>>>
+
+
+2)
+>>> App\Article::first()->title
+=> "LEART LARAVEL"
+>>>
+
+3)
+>>> App\Article::all();
+=> Illuminate\Database\Eloquent\Collection {#3021
+     all: [
+       App\Article {#3026
+         id: 1,
+         user_id: 1,
+         title: "LEART LARAVEL",
+         excerpt: "Et aut possimus vel non doloribus incidunt qui.",
+         body: "Rerum nisi totam voluptatem id. Repudiandae esse voluptatem saepe provident quia aliquid quia. Officiis ea ut quasi. Tenetur quis quia rerum sequi illum porro.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3038
+         id: 3,
+         user_id: 1,
+         title: "Facere omnis voluptatem est doloribus voluptas.",
+         excerpt: "Laudantium quisquam dolores quia sunt sint quibusdam et.",
+         body: "Perspiciatis quo ullam nostrum rerum. Modi et impedit omnis quia aliquam non. Ut voluptatum dolores ut occaecati quia quasi optio. Ipsam quisquam perferendis assumenda
+dolorem.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3039
+         id: 4,
+         user_id: 1,
+         title: "Quia nobis molestias nesciunt voluptatem sequi et expedita officia.",
+         excerpt: "Odio sunt mollitia adipisci illo earum.",
+         body: "Fugit maxime ut et blanditiis tempore. Quasi commodi labore eos incidunt iste. Necessitatibus eos in amet quod illo.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+       App\Article {#3040
+         id: 5,
+         user_id: 1,
+         title: "Necessitatibus et omnis consequatur ea.",
+         excerpt: "Ea deserunt incidunt sunt at.",
+         body: "Eveniet blanditiis ipsum omnis voluptatem ut sint. Fugit id unde aperiam provident atque. Aut enim est quaerat eligendi assumenda quam.",
+         created_at: "2020-04-23 17:37:26",
+         updated_at: "2020-04-23 17:37:26",
+       },
+     ],
+   }
+>>>
+
+
+4)
+- teraz mamy kolekcje artykułów
+
+>>> App\Article::all();
+=> Illuminate\Database\Eloquent\Collection {#3021
+all: []
+
+
+5)
+>>> $tags = App\Article::first()->tags
+=> Illuminate\Database\Eloquent\Collection {#3044
+     all: [
+       App\Tag {#3046
+         id: 1,
+         name: "php",
+         created_at: "2020-04-23 21:10:11",
+         updated_at: "2020-04-23 21:10:11",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3045
+           article_id: 1,
+           tag_id: 1,
+         },
+       },
+       App\Tag {#3049
+         id: 2,
+         name: "laravel",
+         created_at: "2020-04-23 21:13:33",
+         updated_at: "2020-04-23 21:13:33",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3042
+           article_id: 1,
+           tag_id: 2,
+         },
+       },
+       App\Tag {#3050
+         id: 3,
+         name: "education",
+         created_at: "2020-04-23 21:14:08",
+         updated_at: "2020-04-23 21:14:08",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3025
+           article_id: 1,
+           tag_id: 3,
+         },
+       },
+       App\Tag {#3051
+         id: 4,
+         name: "personal",
+         created_at: "2020-04-23 21:14:25",
+         updated_at: "2020-04-23 21:14:25",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3031
+           article_id: 1,
+           tag_id: 4,
+         },
+       },
+     ],
+   }
+>>>
+
+
+6)
+>>> $tags->first();
+=> App\Tag {#3046
+     id: 1,
+     name: "php",
+     created_at: "2020-04-23 21:10:11",
+     updated_at: "2020-04-23 21:10:11",
+     pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3045
+       article_id: 1,
+       tag_id: 1,
+     },
+   }
+>>>
+
+7)
+!! - KOLEKCJA
+
+
+>>> $tags->where('name', 'laravel')
+=> Illuminate\Database\Eloquent\Collection {#3028
+     all: [
+       1 => App\Tag {#3049
+         id: 2,
+         name: "laravel",
+         created_at: "2020-04-23 21:13:33",
+         updated_at: "2020-04-23 21:13:33",
+         pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3042
+           article_id: 1,
+           tag_id: 2,
+         },
+       },
+     ],
+   }
+>>>
+
+8)
+MYSQL - QUERY
+
+>>> $tags->where('name', 'laravel')->first()
+=> App\Tag {#3049
+     id: 2,
+     name: "laravel",
+     created_at: "2020-04-23 21:13:33",
+     updated_at: "2020-04-23 21:13:33",
+     pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3042
+       article_id: 1,
+       tag_id: 2,
+     },
+   }
+>>>
+
+
+9)
+
+>>> $tags->first(function ($tag) { return strlen($tag->name) > 5; });
+=> App\Tag {#3049
+     id: 2,
+     name: "laravel",
+     created_at: "2020-04-23 21:13:33",
+     updated_at: "2020-04-23 21:13:33",
+     pivot: Illuminate\Database\Eloquent\Relations\Pivot {#3042
+       article_id: 1,
+       tag_id: 2,
+     },
+   }
+>>>
+
+
+10)
+>> collect(['One', 'Two', 'Tree']);
+=> Illuminate\Support\Collection {#3028
+     all: [
+       "One",
+       "Two",
+       "Tree",
+     ],
+   }
+
+11)
+>>> collect(['One', 'Two', 'Tree'])->first()
+=> "One"
+>>>
+
+
+12)
+>>> collect(['One', 'Two', 'Tree', ['four', 'five'], 'six']);
+=> Illuminate\Support\Collection {#3060
+     all: [
+       "One",
+       "Two",
+       "Tree",
+       [
+         "four",
+         "five",
+       ],
+       "six",
+     ],
+   }
+>>>
+
+
+
+13)
+>>> collect(['One', 'Two', 'Tree', ['four', 'five'], 'six'])->flatten()
+=> Illuminate\Support\Collection {#3027
+     all: [
+       "One",
+       "Two",
+       "Tree",
+       "four",
+       "five",
+       "six",
+     ],
+   }
+>>>
+
+14)
+>>> $items = collect([1,2,3,4,5,6,7,8,9,10]);
+=> Illuminate\Support\Collection {#3068
+     all: [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+     ],
+   }
+>>>
+
+
+15)
+>>> $items->filter(function ($item) { return $item >= 5;});
+=> Illuminate\Support\Collection {#3023
+     all: [
+       4 => 5,
+       5 => 6,
+       6 => 7,
+       7 => 8,
+       8 => 9,
+       9 => 10,
+     ],
+   }
+>>>
+
+
+16)
+- if you want filter it - you must save it.
+>>> $gratherThen4 = $items->filter(function ($item) { return $item >= 5;});
+     all: [
+       4 => 5,
+       5 => 6,
+       6 => 7,
+       7 => 8,
+       8 => 9,
+       9 => 10,
+     ],
+   }
+>>>
+
+
+17)
+- modulo
+>>> $items->filter(function ($item) { return $item % 2 === 0;});
+=> Illuminate\Support\Collection {#3061
+     all: [
+       1 => 2,
+       3 => 4,
+       5 => 6,
+       7 => 8,
+       9 => 10,
+     ],
+   }
+>>>
+
+18)
+-map
+>>> $items->filter(function ($item) { return $item % 2 === 0;})->map(function ($item) {return $item * 3;});
+=> Illuminate\Support\Collection {#3041
+     all: [
+       1 => 6,
+       3 => 12,
+       5 => 18,
+       7 => 24,
+       9 => 30,
+     ],
+   }
+>>>
+
+19)
+>>> $items->filter(function ($item) { return $item % 2 === 0;})->map(function ($item) {return $item * 3;})->last()
+=> 30
+>>>
+
+20)
+>>> $articles = App\Article::with('tags')->get()
+
+
+21)
+>>> $articles = App\Article::all();
+>>> $articles->pluck('title')
+=> Illuminate\Support\Collection {#3053
+     all: [
+       "LEART LARAVEL",
+       "Facere omnis voluptatem est doloribus voluptas.",
+       "Quia nobis molestias nesciunt voluptatem sequi et expedita officia.",
+       "Necessitatibus et omnis consequatur ea.",
+     ],
+   }
+>>>
+
+
+22)
+mamy wielele tagów, więc zostanie wyświetlaona cala lista, możemy więc utowrzyć nową tablicę
+korzystając z collapse i wyciągnąć same tagi.
+>>> $articles->pluck('tags')
+
+23)
+- wszystko odbyło się w pamięci więc nic nie tracimy.
+
+>>> $articles->pluck('tags')->collapse()->pluck('name')
+=> Illuminate\Support\Collection {#3017
+     all: [
+       "php",
+       "laravel",
+       "education",
+       "personal",
+     ],
+   }
+>>>
+
+
+24)
+>>> $articles->pluck('tags.*.name')
+=> Illuminate\Support\Collection {#3053
+     all: [
+       [
+         "php",
+         "laravel",
+         "education",
+         "personal",
+       ],
+       [],
+       [],
+       [],
+     ],
+   }
+>>>
+
+25)
+>>> $articles->pluck('tags.*.name')->collapse()
+=> Illuminate\Support\Collection {#3059
+     all: [
+       "php",
+       "laravel",
+       "education",
+       "personal",
+     ],
+   }
+>>>
+
+
+26)
+- bez powtórzeń
+>>> $articles->pluck('tags.*.name')->collapse()->unique()
+
+27)
+>>> $articles->pluck('tags.*.name')->collapse()->unique()->map(function($item) { return  ucwords($item);})
+=> Illuminate\Support\Collection {#3079
+     all: [
+       "Php",
+       "Laravel",
+       "Education",
+       "Personal",
+     ],
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
