@@ -93,24 +93,35 @@ Route::get('/',  function (){
 });*/
 
 
-Route::get('/about',  function (){
+/*Route::get('/about',  function (){
     $articles = \App\Article::latest()->get();
 
     return view('about', [
         'articles' => $articles
     ]) ;
-});
+});*/
 
-Route::get('/articles', 'ArticlesController@index');
+/*Route::get('/articles', 'ArticlesController@index');
 Route::post('/articles', 'ArticlesController@store');
 Route::get('/articles/create', 'ArticlesController@create');
 Route::get('/articles/{article}', 'ArticlesController@show')->name('articles.show');
 Route::get('/articles/{article}/edit', 'ArticlesController@edit');
-Route::put('/articles/{article}', 'ArticlesController@update');
+Route::put('/articles/{article}', 'ArticlesController@update');*/
 
 
 
+    Route::get('/', function (){
 
+        $container = new \App\Container();
+
+        $container->bind('example', function (){
+            return new \App\Example();
+        });
+
+            $example = $container->resolve('example');
+            $example->go();
+
+    });
 
 
 

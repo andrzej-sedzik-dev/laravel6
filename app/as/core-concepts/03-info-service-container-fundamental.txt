@@ -1,0 +1,180 @@
+1)
+app/Example.cllass
+app/Container.class
+- dodajemy dla teestu klasy
+class Container{}
+class Example{}
+
+2)
+- w routerze operujemy na kontenerze.
+web.php
+
+    Route::get('/', function (){
+
+        $container = new \App\Container();
+
+        $container->bind('example', function (){
+            return new \App\Example();
+        });
+            ddd($container);
+    });
+
+
+3)
+Error
+Call to undefined method App\Container::bind()
+
+4)
+namespace App;
+
+
+class Container
+{
+    protected $bindings = [];
+
+    public function bind ($key, $value)
+    {
+        $this->bindings[$key] = $value;
+    }
+}
+
+5)
+- metoda zwraca nam Dump, Die, Debug, więc nie jest prawidłowo zaimplementowana.
+http://127.0.0.1:8000/
+info
+Dump, Die, Debug
+
+
+6)
+web.php
+    Route::get('/', function (){
+
+        $container = new \App\Container();
+
+        $container->bind('example', function (){
+            return new \App\Example();
+        });
+
+            $example = $container->resolve('example');
+            ddd($example);
+
+    });
+
+
+
+7)
+http://127.0.0.1:8000/
+Error
+Call to undefined method App\Container::resolve()
+
+
+
+8)
+info
+Dump, Die, Debug
+
+Closure() {#217 ▼
+  class: "Illuminate\Routing\RouteFileRegistrar"
+  this: Illuminate\Routing\RouteFileRegistrar {#196 …}
+  file: "C:\dev\best\back\laravel\laracasts\laravel6\routes\web.php"
+  line: "117 to 119"
+}
+
+
+9)
+Container.php
+
+    public function resolve ($key)
+    {
+        if (isset($this->bindings[$key])){
+            return call_user_func($this->bindings[$key]);
+        }
+
+    }
+
+
+10)
+info
+Dump, Die, Debug
+App\Example {#248}
+C:\dev\best\back\laravel\laracasts\laravel6\vendor\facade\ignition\src\helpers.php:12
+
+
+
+11)
+AFTER:
+
+class Example
+{
+    public function go()
+    {
+        dump('it works');
+    }
+}
+
+12)
+web.php
+BREFORE:
+    Route::get('/', function (){
+
+        $container = new \App\Container();
+
+        $container->bind('example', function (){
+            return new \App\Example();
+        });
+
+            $example = $container->resolve('example');
+            ddd($example);
+
+    });
+
+
+AFTER:
+    Route::get('/', function (){
+
+        $container = new \App\Container();
+
+        $container->bind('example', function (){
+            return new \App\Example();
+        });
+
+            $example = $container->resolve('example');
+            $example->go();
+
+    });
+
+13)
+http://127.0.0.1:8000/
+"it works"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
