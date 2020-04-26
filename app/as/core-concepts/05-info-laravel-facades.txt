@@ -1,0 +1,13 @@
+1)
+    public function home()
+    {
+        return View::make('welcome');
+    }
+
+2)
+PagesController.php
+To jest to samo
+    public function home()
+    {
+        return view::('welcome');
+    }
